@@ -1,0 +1,32 @@
+---
+#
+# edX Configuration
+#
+# github:     https://github.com/edx/configuration
+# wiki:       https://github.com/edx/configuration/wiki
+# code style: https://github.com/edx/configuration/wiki/Ansible-Coding-Conventions
+# license:    https://github.com/edx/configuration/blob/master/LICENSE.TXT
+#
+##
+# Defaults for role new_relic
+#
+
+#
+# vars are namespace with the module name.
+#
+new_relic_role_name: new_relic
+newrelic_loaded_os_family: False
+
+#
+# OS packages
+#
+
+newrelic_loglevel: info
+newrelic_logfile: /var/log/newrelic/nrsysmond.log
+newrelic_proxy: False
+newrelic_ssl: "false"
+newrelic_ssl_ca_bundle: False
+newrelic_ssl_ca_path: False
+newrelic_pidfile: /var/run/newrelic/nrsysmond.pid
+newrelic_collector_host: collector.newrelic.com
+newrelic_timeout: 30
