@@ -45,3 +45,6 @@
     name: newrelic-sysmond
     state: started
     enabled: yes
+
+- include: appmonitoring.yml
+  when: newrelic_app_monitor
