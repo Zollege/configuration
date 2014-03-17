@@ -1,0 +1,38 @@
+---
+#
+# edX Configuration
+#
+# github:     https://github.com/edx/configuration
+# wiki:       https://github.com/edx/configuration/wiki
+# code style: https://github.com/edx/configuration/wiki/Ansible-Coding-Conventions
+# license:    https://github.com/edx/configuration/blob/master/LICENSE.TXT
+#
+# Monitoring the python app
+
+- name: "writing newrelic configuration file"
+  template: >
+    src=newrelic.ini.j2 dest={{ edxapp_app_dir }}/newrelic.ini
+    owner={{ edxapp_user }}
+  sudo_user: "{{ edxapp_user }}"
+  # notify:
+  #   - Update supervisor
+
+- name: "changing {{ item }} supervisor script"
+  template: >
+    src={{ item }}.conf.j2 dest={{ supervisor_cfg_dir }}/{{ item }}.conf
+    owner={{ supervisor_user }}
+  with_items: service_variants_enabled
+  sudo_user: "{{ supervisor_user }}"
+  # notify:
+  #   - Update supervisor
+
+  # call supervisorctl update every time, this reloads
+  # the supervisorctl config
+  #
+  # we don't use notifications for supervisor because
+  # they don't work well with parameterized roles.
+  # See https://github.com/ansible/ansible/issues/4853
+- name: update supervisor configuration
+  shell:  "{{ supervisor_ctl }} -c {{ supervisor_cfg }} update"
+  register: newrelic_supervisor_update
+  changed_when: newrelic_supervisor_update.stdout != ""
